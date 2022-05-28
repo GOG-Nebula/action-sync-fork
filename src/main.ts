@@ -35,11 +35,12 @@ async function run() {
         path: 'src/manifest.json'
       })
       if ('content' in base_manifest && 'content' in upstream_manifest) {
-        core.info(upstream_manifest.)
-        const base_version = JSON.parse(Buffer.from(base_manifest.content, 'base64').toString())['version']
-        const upstream_version = JSON.parse(Buffer.from(upstream_manifest.content, 'base64').toString())[
-          'version'
-        ]
+        const base_version = JSON.parse(
+          Buffer.from(base_manifest.content, 'base64').toString()
+        )['version']
+        const upstream_version = JSON.parse(
+          Buffer.from(upstream_manifest.content, 'base64').toString()
+        )['version']
         core.info('Base ver: ' + base_version)
         core.info('Upstream ver: ' + upstream_version)
         if (base_version !== upstream_version) {
