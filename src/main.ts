@@ -34,14 +34,14 @@ async function run() {
         repo,
         path: 'src/manifest.json'
       })
-      console.log(upstream_manifest)
       if ('content' in base_manifest && 'content' in upstream_manifest) {
+        core.info(upstream_manifest.content)
         const base_version = JSON.parse(base_manifest.content)['version']
         const upstream_version = JSON.parse(upstream_manifest.content)[
           'version'
         ]
-        console.log('Base ver: ', base_version)
-        console.log('Upstream ver: ', upstream_version)
+        core.info('Base ver: ' + base_version)
+        core.info('Upstream ver: ' + upstream_version)
         if (base_version !== upstream_version) {
           const {data: pr} = await oktokit.rest.pulls.create({
             owner,
