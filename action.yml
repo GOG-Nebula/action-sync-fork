@@ -41,7 +41,6 @@ runs:
       if: ${{ steps.upstream_version.outputs.prop != steps.base_version.outputs.prop }}
       uses: peter-evans/create-pull-request@v4
       with:
-        base: ${{ github.repository }}
         branch: pr/sync
         delete-branch: true
         title: sync v${{ steps.upstream_version.outputs.prop }}
