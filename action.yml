@@ -11,45 +11,5 @@ inputs:
   reviewers:
     description: 'A comma or newline separated list of reviewers (GitHub usernames) to request a review from.'
 runs:
-  using: 'composite'
-  steps:
-    - name: Checkout base
-      uses: actions/checkout@v3
-    - name: Get base version
-      id: base_version
-      uses: notiz-dev/github-action-json-property@release
-      with:
-        path: 'src/manifest.json'
-        prop_path: 'version'
-    - run: "echo Got base version: ${{ steps.base_version.outputs.prop }}"
-      shell: bash
-    - name: Checkout upstream
-      uses: actions/checkout@v3
-      with:
-        repository: ${{ inputs.upstream }}
-        ref: ${{ inputs.upstream_ref }}
-    - name: Get upstream version
-      id: upstream_version
-      uses: notiz-dev/github-action-json-property@release
-      with:
-        path: 'src/manifest.json'
-        prop_path: 'version'
-    - run: "echo Got upstream version: ${{ steps.upstream_version.outputs.prop }}"
-      shell: bash
-    - name: Create pull request
-      id: cpr
-      if: ${{ steps.upstream_version.outputs.prop != steps.base_version.outputs.prop }}
-      uses: peter-evans/create-pull-request@v4
-      with:
-        branch: pr/sync
-        delete-branch: true
-        title: sync v${{ steps.upstream_version.outputs.prop }}
-        labels: auto sync
-        reviewers: ${{ inputs.reviewers }}
-    - name: Check outputs
-      if: ${{ steps.cpr.outputs.pull-request-number }}
-      run: |
-        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
-      shell: bash
-
+  using: 'node16'
+  main: 'dist/index.js'
