@@ -34,6 +34,7 @@ async function run() {
         repo,
         path: 'src/manifest.json'
       })
+      console.log(upstream_manifest)
       if ('content' in base_manifest && 'content' in upstream_manifest) {
         const base_version = JSON.parse(base_manifest.content)['version']
         const upstream_version = JSON.parse(upstream_manifest.content)[
