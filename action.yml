@@ -5,6 +5,9 @@ inputs:
   upstream:
     description: 'Upstream repo of the fork. (eg. Codertocat/Hello-World)'
     required: true
+  upstream_ref: 
+    description: 'The branch, tag or SHA to checkout (upstream).'
+    default: ''
   reviewers:
     description: 'A comma or newline separated list of reviewers (GitHub usernames) to request a review from.'
 runs:
@@ -24,6 +27,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: ${{ inputs.upstream }}
+        ref: ${{ inputs.upstream_ref }}
     - name: Get upstream version
       id: upstream_version
       uses: notiz-dev/github-action-json-property@release

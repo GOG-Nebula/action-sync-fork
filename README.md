@@ -12,7 +12,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: GOG-Nebula/syncer@v0
+      - uses: GOG-Nebula/syncer@feature/initial
         with:
           upstream: owner/repo
           reviewers: username1,username2
