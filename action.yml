@@ -2,14 +2,16 @@ name: "syncer"
 author: "GOG Nebula"
 description: "Sync galaxy integration forks with upstream"
 inputs:
-  upstream:
-    description: 'Upstream repo of the fork. (eg. Codertocat/Hello-World)'
+  upstream_owner:
     required: true
-  upstream_ref: 
-    description: 'The branch, tag or SHA to checkout (upstream).'
-    default: ''
+  upstream_repo:
+    required: true
+  upstream_branch: 
+    required: false
   reviewers:
     description: 'A comma or newline separated list of reviewers (GitHub usernames) to request a review from.'
+  token: 
+    default: ${{ secrets.GITHUB_TOKEN }}
 runs:
   using: 'node16'
   main: 'dist/index.js'
