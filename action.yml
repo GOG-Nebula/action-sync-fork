@@ -21,7 +21,7 @@ runs:
       with:
         path: 'src/manifest.json'
         prop_path: 'version'
-    - run: echo Got base version: ${{steps.base_version.outputs.prop}}
+    - run: "echo Got base version: ${{ steps.base_version.outputs.prop }}"
       shell: bash
     - name: Checkout upstream
       uses: actions/checkout@v3
@@ -34,7 +34,7 @@ runs:
       with:
         path: 'src/manifest.json'
         prop_path: 'version'
-    - run: echo Got upstream version: ${{steps.upstream_version.outputs.prop}}
+    - run: "echo Got upstream version: ${{ steps.upstream_version.outputs.prop }}"
       shell: bash
     - name: Create pull request
       id: cpr
