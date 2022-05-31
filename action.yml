@@ -1,4 +1,4 @@
-name: 'syncer'
+name: 'sync-fork'
 author: 'GOG Nebula'
 description: 'Sync galaxy integration forks with upstream'
 inputs:

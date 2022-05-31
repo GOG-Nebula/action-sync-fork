@@ -1,4 +1,4 @@
-# syncer
+# action-sync-fork
 
 Syncs galaxy integration forks with upstream
 

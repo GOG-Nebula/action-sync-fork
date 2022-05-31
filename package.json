@@ -1,5 +1,5 @@
 {
-  "name": "syncer",
+  "name": "sync-fork",
   "version": "0.0.0",
   "private": true,
   "description": "Sync galaxy integration fork with upstream",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GOG-Nebula/syncer.git"
+    "url": "git+https://github.com/GOG-Nebula/action-sync-fork.git"
   },
   "keywords": [
     "actions",
