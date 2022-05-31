@@ -3,7 +3,9 @@
 Syncs galaxy integration forks with upstream
 
 ## Example Usage (workflow) - OUTDATED
+
 [`.github/workflows/sync.yml`](https://github.com/GOG-Nebula/galaxy-riot-integration/blob/9da15bdfd5f30f2aa6e887491d7f53d0853adeae/.github/workflows/sync.yml)
+
 ```yaml
 name: sync-upstream
 on:
@@ -14,7 +16,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: GOG-Nebula/syncer@feature/initial
+      - uses: GOG-Nebula/action-sync-fork@feature/initial
         with:
           upstream_owner: urwrstkn8mare
           upstream_repo: galaxy-riot-integration
