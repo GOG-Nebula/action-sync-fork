@@ -25,6 +25,6 @@ jobs:
 
 - [ ] better logging in the action
 - [ ] update the readme
-- [ ] fix this repo's workflows (incl making them use yarn instead of npm)
+- [x] fix this repo's workflows (incl making them use yarn instead of npm)
 - [ ] add tests (maybe not worth it)
 - [ ] improve code readablitiy
