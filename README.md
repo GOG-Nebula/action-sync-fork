@@ -2,7 +2,8 @@
 
 Syncs galaxy integration forks with upstream
 
-## Example Usage (workflow)
+## Example Usage (workflow) - OUTDATED
+
 ```yaml
 name: sync-upstream
 on:
@@ -17,4 +18,13 @@ jobs:
           upstream: owner/repo
           reviewers: username1,username2
 ```
-***NOTE: should not be used in an integration (eg. cron value is just a random value)***
+
+**_NOTE: should not be used in an integration (eg. cron value is just a random value)_**
+
+## TODO
+
+- [ ] better logging in the action
+- [ ] update the readme
+- [ ] fix this repo's workflows (incl making them use yarn instead of npm)
+- [ ] add tests (maybe not worth it)
+- [ ] improve code readablitiy
