@@ -16,7 +16,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: GOG-Nebula/action-sync-fork@feature/initial
+      - uses: GOG-Nebula/action-sync-fork@main
         with:
           upstream_owner: urwrstkn8mare
           upstream_repo: galaxy-riot-integration
