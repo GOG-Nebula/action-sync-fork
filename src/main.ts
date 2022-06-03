@@ -81,24 +81,24 @@ async function run() {
       if (base.version !== upstream.version) {
         core.info('Creating PR')
         const {data: pr} = await oktokit.rest.pulls.create({
-          owner: base.owner,
-          repo: base.owner,
-          head: upstream.owner + ':' + upstream.branch,
-          base: base.branch,
+          owner: upstream.owner,
+          repo: upstream.owner,
+          head: base.owner + ':' + base.branch,
+          base: upstream.branch,
           maintainer_can_modify: false,
           title: 'New version from upstream',
           body: `${base.version} --> ${upstream.version}\nNOTE: This PR will **include commits made after version release** and continue to do so (until merged).`
         })
         core.notice(`Created PR #${pr.number}`)
         await oktokit.rest.issues.addLabels({
-          owner: base.branch,
+          owner: upstream.branch,
           repo: base.repo,
           issue_number: pr.number,
           labels: ['autosync']
         })
         core.info("Added 'autosync' label.")
         await oktokit.rest.pulls.requestReviewers({
-          owner: base.owner,
+          owner: upstream.owner,
           repo: base.repo,
           pull_number: pr.number,
           reviewers
