@@ -8800,7 +8800,7 @@ function run() {
                     });
                     core.notice(`Created PR #${pr.number}`);
                     yield oktokit.rest.issues.addLabels({
-                        owner: base.branch,
+                        owner: base.owner,
                         repo: base.repo,
                         issue_number: pr.number,
                         labels: ['autosync']
