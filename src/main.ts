@@ -64,15 +64,14 @@ async function run() {
   core.debug('Got reviewers: ' + reviewers)
 
   try {
-    const {
-      data: {total_count: pull_count}
-    } = await oktokit.rest.search.issuesAndPullRequests({
+    const {data: pulls} = await oktokit.rest.search.issuesAndPullRequests({
       q: 'label:autosync+state:open+is:pull-request',
       per_page: 1
     })
-    core.info(`Found ${pull_count} PRs open with the label: 'autosync'`)
+    core.debug(`Pulls: ${pulls.items.map(v => v.id).join(',')}`)
+    core.info(`Found ${pulls.total_count} PRs open with the label: 'autosync'`)
 
-    if (pull_count < 1) {
+    if (pulls.total_count < 1) {
       core.info('Continuing...')
       core.info(`Base version: ${base.version}`)
       core.info(`Upstream version: ${upstream.version}`)
