@@ -3,7 +3,7 @@ import * as github from '@actions/github'
 
 const oktokit = github.getOctokit(core.getInput('token'))
 
-class Repo {
+class Plugin {
   readonly owner: string
   readonly repo: string
   readonly branch: string
@@ -43,18 +43,18 @@ class Repo {
       branch ||
       (await oktokit.rest.repos.get({owner, repo})).data.default_branch
     core.debug(`Chosen branch for ${owner}/${repo}: ${the_branch}`)
-    const version = await Repo.version(owner, repo, the_branch)
+    const version = await Plugin.version(owner, repo, the_branch)
     core.debug(`Got version ${version} for ${owner}/${repo}@${the_branch}`)
-    return new Repo(owner, repo, the_branch, version)
+    return new Plugin(owner, repo, the_branch, version)
   }
 }
 
 async function run() {
-  const base = await Repo.build(
+  const base = await Plugin.build(
     github.context.repo.owner,
     github.context.repo.repo
   )
-  const upstream = await Repo.build(
+  const upstream = await Plugin.build(
     core.getInput('upstream_owner'),
     core.getInput('upstream_repo'),
     core.getInput('upstream_branch')
