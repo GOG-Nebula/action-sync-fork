@@ -8799,14 +8799,14 @@ function run() {
                         body: `${base.version} --> ${upstream.version}\nNOTE: This PR will **include commits made after version release** and continue to do so (until merged).`
                     });
                     core.notice(`Created PR #${pr.number}`);
-                    oktokit.rest.issues.addLabels({
+                    yield oktokit.rest.issues.addLabels({
                         owner: base.branch,
                         repo: base.repo,
                         issue_number: pr.number,
                         labels: ['autosync']
                     });
                     core.info("Added 'autosync' label.");
-                    oktokit.rest.pulls.requestReviewers({
+                    yield oktokit.rest.pulls.requestReviewers({
                         owner: base.owner,
                         repo: base.repo,
                         pull_number: pr.number,
