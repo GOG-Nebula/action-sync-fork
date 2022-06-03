@@ -2,7 +2,7 @@
 
 Syncs galaxy integration forks with upstream
 
-## Example Usage
+## **_Example_** Usage
 
 ```yaml
 name: sync-upstream
@@ -22,8 +22,6 @@ jobs:
           reviewers: urwrstkn8mare,UncleGoogle,AndrewDWhite
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
-
-**_NOTE: should not be used in an integration (eg. cron value is just a random value)_**
 
 ## TODO
 
