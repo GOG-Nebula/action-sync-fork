@@ -1,6 +1,6 @@
 {
   "name": "sync-fork",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Sync galaxy integration fork with upstream",
   "main": "src/main.ts",
