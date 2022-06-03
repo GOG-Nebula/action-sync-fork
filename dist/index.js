@@ -8771,6 +8771,7 @@ class Plugin {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        core.info(`Is debug? ${core.isDebug() ? 'YES' : 'NO'}`);
         const base = yield Plugin.build(github.context.repo.owner, github.context.repo.repo);
         const upstream = yield Plugin.build(core.getInput('upstream_owner'), core.getInput('upstream_repo'), core.getInput('upstream_branch'));
         const reviewers = core.getInput('reviewers').split(',');
@@ -8797,7 +8798,7 @@ function run() {
                         title: 'New version from upstream',
                         body: `${base.version} --> ${upstream.version}\nNOTE: This PR will **include commits made after version release** and continue to do so (until merged).`
                     });
-                    core.info(`Created PR #${pr.number}`);
+                    core.notice(`Created PR #${pr.number}`);
                     oktokit.rest.issues.addLabels({
                         owner: base.branch,
                         repo: base.repo,
@@ -8814,10 +8815,10 @@ function run() {
                     core.info(`Added reviewers: ${reviewers}`);
                 }
                 else
-                    core.info('Nothing to do!');
+                    core.notice('Nothing to do!');
             }
             else
-                core.info('Already been done!');
+                core.notice('Already been done!');
         }
         catch (error) {
             core.setFailed(error);
