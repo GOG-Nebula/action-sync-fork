@@ -50,6 +50,8 @@ class Plugin {
 }
 
 async function run() {
+  core.info(`Is debug? ${core.isDebug() ? 'YES' : 'NO'}`)
+
   const base = await Plugin.build(
     github.context.repo.owner,
     github.context.repo.repo
