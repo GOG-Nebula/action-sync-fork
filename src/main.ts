@@ -3,18 +3,39 @@ import * as github from '@actions/github'
 
 const oktokit = github.getOctokit(core.getInput('token'))
 
+class Repo {
+  readonly owner: string
+  readonly repo: string
+  readonly branch: string
+
+  protected constructor(owner: string, repo: string, branch: string) {
+    this.owner = owner
+    this.repo = repo
+    this.branch = branch
+  }
+
+  public static async build(owner: string, repo: string, branch?: string) {
+    return new Repo(
+      owner,
+      repo,
+      branch ||
+        (await oktokit.rest.repos.get({owner, repo})).data.default_branch
+    )
+  }
+}
+
 async function run() {
-  const owner = github.context.repo.owner
-  const repo = github.context.repo.repo
-  const upstream_owner = core.getInput('upstream_owner')
-  const upstream_repo = core.getInput('upstream_repo')
-  const upstream_branch =
-    core.getInput('upstream_branch') ||
-    (await oktokit.rest.repos.get({owner: upstream_owner, repo: upstream_repo}))
-      .data.default_branch
+  const base = await Repo.build(
+    github.context.repo.owner,
+    github.context.repo.repo
+  )
+  const upstream = await Repo.build(
+    core.getInput('upstream_owner'),
+    core.getInput('upstream_repo'),
+    core.getInput('upstream_branch')
+  )
+
   const reviewers = core.getInput('reviewers').split(',')
-  const base_branch = (await oktokit.rest.repos.get({owner, repo})).data
-    .default_branch
 
   try {
     const {data: autosync_pulls} =

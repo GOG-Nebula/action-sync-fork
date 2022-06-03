@@ -4,8 +4,6 @@ Syncs galaxy integration forks with upstream
 
 ## Example Usage
 
-[`.github/workflows/sync.yml`](https://github.com/GOG-Nebula/galaxy-riot-integration/blob/9da15bdfd5f30f2aa6e887491d7f53d0853adeae/.github/workflows/sync.yml)
-
 ```yaml
 name: sync-upstream
 on:
