@@ -27,8 +27,8 @@ jobs:
 
 ## TODO
 
-- [ ] better logging in the action
+- [x] better logging in the action
 - [x] update the readme
 - [x] fix this repo's workflows (incl making them use yarn instead of npm)
 - [ ] add tests (maybe not worth it)
-- [ ] improve code readablitiy
+- [x] improve code readablitiy

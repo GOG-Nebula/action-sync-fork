@@ -8732,64 +8732,91 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const oktokit = github.getOctokit(core.getInput('token'));
+class Repo {
+    // the action only runs within a short period of time
+    // during which the plugin shouldn't change version.
+    constructor(owner, repo, branch, version) {
+        this.owner = owner;
+        this.repo = repo;
+        this.branch = branch;
+        this.version = version;
+    }
+    static version(owner, repo, branch) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { data } = yield oktokit.rest.repos.getContent({
+                owner,
+                repo,
+                ref: branch,
+                path: 'src/manifest.json'
+            });
+            if ('content' in data) {
+                const text = Buffer.from(data.content, 'base64').toString();
+                core.debug(`Manifest for ${owner}/${repo}@${branch}: ${text}`);
+                return JSON.parse(text)['version'];
+            }
+            else
+                throw Error("'data' has no 'content' property! (manifest)");
+        });
+    }
+    static build(owner, repo, branch) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const the_branch = branch ||
+                (yield oktokit.rest.repos.get({ owner, repo })).data.default_branch;
+            core.debug(`Chosen branch for ${owner}/${repo}: ${the_branch}`);
+            const version = yield Repo.version(owner, repo, the_branch);
+            core.debug(`Got version ${version} for ${owner}/${repo}@${the_branch}`);
+            return new Repo(owner, repo, the_branch, version);
+        });
+    }
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const owner = github.context.repo.owner;
-        const repo = github.context.repo.repo;
-        const upstream_owner = core.getInput('upstream_owner');
-        const upstream_repo = core.getInput('upstream_repo');
-        const upstream_branch = core.getInput('upstream_branch') ||
-            (yield oktokit.rest.repos.get({ owner: upstream_owner, repo: upstream_repo }))
-                .data.default_branch;
+        const base = yield Repo.build(github.context.repo.owner, github.context.repo.repo);
+        const upstream = yield Repo.build(core.getInput('upstream_owner'), core.getInput('upstream_repo'), core.getInput('upstream_branch'));
         const reviewers = core.getInput('reviewers').split(',');
-        const base_branch = (yield oktokit.rest.repos.get({ owner, repo })).data
-            .default_branch;
+        core.debug('Got reviewers: ' + reviewers);
         try {
-            const { data: autosync_pulls } = yield oktokit.rest.search.issuesAndPullRequests({
+            const { data: { total_count: pull_count } } = yield oktokit.rest.search.issuesAndPullRequests({
                 q: 'label:autosync+state:open+is:pull-request',
                 per_page: 1
             });
-            if (autosync_pulls.total_count < 1) {
-                const { data: upstream_manifest } = yield oktokit.rest.repos.getContent({
-                    owner: upstream_owner,
-                    repo: upstream_repo,
-                    ref: upstream_branch,
-                    path: 'src/manifest.json'
-                });
-                const { data: base_manifest } = yield oktokit.rest.repos.getContent({
-                    owner,
-                    repo,
-                    path: 'src/manifest.json'
-                });
-                if ('content' in base_manifest && 'content' in upstream_manifest) {
-                    const base_version = JSON.parse(Buffer.from(base_manifest.content, 'base64').toString())['version'];
-                    const upstream_version = JSON.parse(Buffer.from(upstream_manifest.content, 'base64').toString())['version'];
-                    core.info('Base ver: ' + base_version);
-                    core.info('Upstream ver: ' + upstream_version);
-                    if (base_version !== upstream_version) {
-                        const { data: pr } = yield oktokit.rest.pulls.create({
-                            owner,
-                            repo,
-                            head: upstream_owner + ':' + upstream_branch,
-                            base: base_branch,
-                            maintainer_can_modify: false,
-                            title: 'New version from upstream'
-                        });
-                        oktokit.rest.issues.addLabels({
-                            owner,
-                            repo,
-                            issue_number: pr.number,
-                            labels: ['autosync']
-                        });
-                        oktokit.rest.pulls.requestReviewers({
-                            owner,
-                            repo,
-                            pull_number: pr.number,
-                            reviewers
-                        });
-                    }
+            core.info(`Found ${pull_count} PRs open with the label: 'autosync'`);
+            if (pull_count < 1) {
+                core.info('Continuing...');
+                core.info(`Base version: ${base.version}`);
+                core.info(`Upstream version: ${upstream.version}`);
+                if (base.version !== upstream.version) {
+                    core.info('Creating PR');
+                    const { data: pr } = yield oktokit.rest.pulls.create({
+                        owner: base.owner,
+                        repo: base.owner,
+                        head: upstream.owner + ':' + upstream.branch,
+                        base: base.branch,
+                        maintainer_can_modify: false,
+                        title: 'New version from upstream',
+                        body: `${base.version} --> ${upstream.version}\nNOTE: This PR will **include commits made after version release** and continue to do so (until merged).`
+                    });
+                    core.info(`Created PR #${pr.number}`);
+                    oktokit.rest.issues.addLabels({
+                        owner: base.branch,
+                        repo: base.repo,
+                        issue_number: pr.number,
+                        labels: ['autosync']
+                    });
+                    core.info("Added 'autosync' label.");
+                    oktokit.rest.pulls.requestReviewers({
+                        owner: base.owner,
+                        repo: base.repo,
+                        pull_number: pr.number,
+                        reviewers
+                    });
+                    core.info(`Added reviewers: ${reviewers}`);
                 }
+                else
+                    core.info('Nothing to do!');
             }
+            else
+                core.info('Already been done!');
         }
         catch (error) {
             core.setFailed(error);
