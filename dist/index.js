@@ -8778,7 +8778,7 @@ function run() {
         core.debug('Got reviewers: ' + reviewers);
         try {
             const { data: pulls } = yield oktokit.rest.search.issuesAndPullRequests({
-                q: 'label:autosync+state:open+is:pull-request',
+                q: `repo:${base.owner}/${base.repo}+label:autosync+state:open+is:pr`,
                 per_page: 1
             });
             core.debug(`Pulls: ${pulls.items.map(v => v.number).join(',')}`);
