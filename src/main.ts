@@ -67,7 +67,7 @@ async function run() {
 
   try {
     const {data: pulls} = await oktokit.rest.search.issuesAndPullRequests({
-      q: 'label:autosync+state:open+is:pull-request',
+      q: `repo:${base.owner}/${base.repo}+label:autosync+state:open+is:pr`,
       per_page: 1
     })
     core.debug(`Pulls: ${pulls.items.map(v => v.number).join(',')}`)
