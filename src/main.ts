@@ -70,7 +70,7 @@ async function run() {
       q: 'label:autosync+state:open+is:pull-request',
       per_page: 1
     })
-    core.debug(`Pulls: ${pulls.items.map(v => v.id).join(',')}`)
+    core.debug(`Pulls: ${pulls.items.map(v => v.number).join(',')}`)
     core.info(`Found ${pulls.total_count} PRs open with the label: 'autosync'`)
 
     if (pulls.total_count < 1) {
