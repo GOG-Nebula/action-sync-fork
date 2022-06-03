@@ -87,7 +87,7 @@ async function run() {
           title: 'New version from upstream',
           body: `${base.version} --> ${upstream.version}\nNOTE: This PR will **include commits made after version release** and continue to do so (until merged).`
         })
-        core.info(`Created PR #${pr.number}`)
+        core.notice(`Created PR #${pr.number}`)
         oktokit.rest.issues.addLabels({
           owner: base.branch,
           repo: base.repo,
@@ -102,8 +102,8 @@ async function run() {
           reviewers
         })
         core.info(`Added reviewers: ${reviewers}`)
-      } else core.info('Nothing to do!')
-    } else core.info('Already been done!')
+      } else core.notice('Nothing to do!')
+    } else core.notice('Already been done!')
   } catch (error: any) {
     core.setFailed(error)
   }
