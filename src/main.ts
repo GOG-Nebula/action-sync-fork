@@ -80,6 +80,7 @@ async function run() {
 
       if (base.version !== upstream.version) {
         core.info('Creating PR')
+        core.debug('swapped')
         const {data: pr} = await oktokit.rest.pulls.create({
           owner: upstream.owner,
           repo: upstream.owner,

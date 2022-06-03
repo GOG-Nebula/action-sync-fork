@@ -8789,6 +8789,7 @@ function run() {
                 core.info(`Upstream version: ${upstream.version}`);
                 if (base.version !== upstream.version) {
                     core.info('Creating PR');
+                    core.debug('swapped');
                     const { data: pr } = yield oktokit.rest.pulls.create({
                         owner: upstream.owner,
                         repo: upstream.owner,
