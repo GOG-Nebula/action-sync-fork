@@ -8732,7 +8732,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const oktokit = github.getOctokit(core.getInput('token'));
-class Repo {
+class Plugin {
     // the action only runs within a short period of time
     // during which the plugin shouldn't change version.
     constructor(owner, repo, branch, version) {
@@ -8763,25 +8763,26 @@ class Repo {
             const the_branch = branch ||
                 (yield oktokit.rest.repos.get({ owner, repo })).data.default_branch;
             core.debug(`Chosen branch for ${owner}/${repo}: ${the_branch}`);
-            const version = yield Repo.version(owner, repo, the_branch);
+            const version = yield Plugin.version(owner, repo, the_branch);
             core.debug(`Got version ${version} for ${owner}/${repo}@${the_branch}`);
-            return new Repo(owner, repo, the_branch, version);
+            return new Plugin(owner, repo, the_branch, version);
         });
     }
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const base = yield Repo.build(github.context.repo.owner, github.context.repo.repo);
-        const upstream = yield Repo.build(core.getInput('upstream_owner'), core.getInput('upstream_repo'), core.getInput('upstream_branch'));
+        const base = yield Plugin.build(github.context.repo.owner, github.context.repo.repo);
+        const upstream = yield Plugin.build(core.getInput('upstream_owner'), core.getInput('upstream_repo'), core.getInput('upstream_branch'));
         const reviewers = core.getInput('reviewers').split(',');
         core.debug('Got reviewers: ' + reviewers);
         try {
-            const { data: { total_count: pull_count } } = yield oktokit.rest.search.issuesAndPullRequests({
+            const { data: pulls } = yield oktokit.rest.search.issuesAndPullRequests({
                 q: 'label:autosync+state:open+is:pull-request',
                 per_page: 1
             });
-            core.info(`Found ${pull_count} PRs open with the label: 'autosync'`);
-            if (pull_count < 1) {
+            core.debug(`Pulls: ${pulls.items.map(v => v.id).join(',')}`);
+            core.info(`Found ${pulls.total_count} PRs open with the label: 'autosync'`);
+            if (pulls.total_count < 1) {
                 core.info('Continuing...');
                 core.info(`Base version: ${base.version}`);
                 core.info(`Upstream version: ${upstream.version}`);
