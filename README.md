@@ -30,3 +30,7 @@ jobs:
 - [x] fix this repo's workflows (incl making them use yarn instead of npm)
 - [ ] add tests (maybe not worth it)
 - [x] improve code readablitiy
+
+## CONTRIBUTING
+
+Make changes in `src/`, before commiting, please make sure to run `yarn package`. If you don't the checks will fail so just make a new commit (e.g. "yarn package") with the `dist/` updated.
