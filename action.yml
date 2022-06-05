@@ -1,0 +1,17 @@
+name: 'sync-fork'
+author: 'GOG Nebula'
+description: 'Sync galaxy integration forks with upstream'
+inputs:
+  upstream_owner:
+    required: true
+  upstream_repo:
+    required: true
+  upstream_branch:
+    required: false
+  reviewers:
+    description: 'A comma or newline separated list of reviewers (GitHub usernames) to request a review from.'
+  token:
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

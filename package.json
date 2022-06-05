@@ -1,0 +1,40 @@
+{
+  "name": "sync-fork",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sync galaxy integration fork with upstream",
+  "main": "src/main.ts",
+  "scripts": {
+    "format": "prettier --write '**/*.ts'",
+    "format-check": "prettier --check '**/*.ts'",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "all": "npm run format && npm run lint && npm run package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GOG-Nebula/action-sync-fork.git"
+  },
+  "keywords": [
+    "actions",
+    "node",
+    "sync",
+    "galaxy"
+  ],
+  "author": "GOG-Nebula",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^16.10.5",
+    "@typescript-eslint/parser": "^5.8.1",
+    "@vercel/ncc": "^0.31.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-github": "^4.3.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "js-yaml": "^4.1.0",
+    "prettier": "2.5.1",
+    "typescript": "^4.7.2"
+  }
+}
